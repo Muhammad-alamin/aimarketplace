@@ -84,39 +84,81 @@ Route::get('admin/edit/products/{id}',[App\Http\Controllers\Admin\ProductsContro
 Route::post('admin/update/products/{id}',[App\Http\Controllers\Admin\ProductsController::class,'update'])->name('admin.products.update');
 Route::get('admin/delete/products/{id}',[App\Http\Controllers\Admin\ProductsController::class,'delete'])->name('admin.products.delete');
 
-//articles
-Route::get('admin/create/articles','Admin\ArticlesController@view')->name('admin.articles');
-Route::get('admin/articles/list','Admin\ArticlesController@index')->name('admin.articles.list');
-Route::post('admin/store/articles','Admin\ArticlesController@store')->name('admin.articles.store');
-Route::get('admin/edit/articles/{id}','Admin\ArticlesController@edit')->name('admin.articles.edit');
-Route::post('admin/update/articles/{id}','Admin\ArticlesController@update')->name('admin.articles.update');
-Route::get('admin/delete/articles/{id}','Admin\ArticlesController@delete')->name('admin.articles.delete');
-
-//admin
-Route::get('/admin-profile','Admin\ProfileController@index')->name('admin.profile');
-Route::get('/admin-profile/pic','Admin\ProfileController@updatePic')->name('admin.profile.pic');
-Route::post('/admin-profile-update/{id}','Admin\ProfileController@updateAdmin')->name('admin.profile.update');
-Route::post('/admin-profile-pic-update/{id}','Admin\ProfileController@updateAdminPic')->name('admin.profile.pic.update');
+    //products approval
+    Route::get('product/approval',[App\Http\Controllers\Admin\ProductApprovalController::class,'index'])->name('admin.product.approval');
+    Route::get('product/edit/{id}',[App\Http\Controllers\Admin\ProductApprovalController::class,'edit'])->name('admin.product.edit');
+    Route::put('product/update/{id}',[App\Http\Controllers\Admin\ProductApprovalController::class,'update'])->name('admin.product.update');
+    Route::get('admin/products/delete/{id}',[App\Http\Controllers\Admin\ProductApprovalController::class,'delete'])->name('admin.product.delete');
+    Route::get('admin/products/details/{id}',[App\Http\Controllers\Admin\ProductApprovalController::class,'details'])->name('admin.product.details');
 
 
+//admin profile
+Route::get('/admin-profile',[App\Http\Controllers\Admin\ProfileController::class,'index'])->name('admin.profile');
+Route::get('/admin-profile/pic',[App\Http\Controllers\Admin\ProfileController::class,'updatePic'])->name('admin.profile.pic');
+Route::post('/admin-profile-update/{id}',[App\Http\Controllers\Admin\ProfileController::class,'updateAdmin'])->name('admin.profile.update');
+Route::post('/admin-profile-pic-update/{id}',[App\Http\Controllers\Admin\ProfileController::class,'updateAdminPic'])->name('admin.profile.pic.update');
 
-//Supplier
+    //orderlist
+    Route::get('admin/order-list',[App\Http\Controllers\Admin\OrderController::class,'index'])->name('order.index');
+    Route::get('admin/order/details/{id}',[App\Http\Controllers\Admin\OrderController::class,'show'])->name('admin.order.show');
+    Route::put('admin/order/{id}/{status}',[App\Http\Controllers\Admin\OrderController::class,'change_status'])->name('admin.order.change.status');
+    Route::get('admin/orders/export/{status}',[App\Http\Controllers\Admin\OrderController::class,'export'])->name('admin.order.export');
 
-Route::get('seller/dashboard',[App\Http\Controllers\Seller\DashboardController::class,'view'])->name('seller.dashboard');
+    //Invoice
+    Route::get('invoice/{id}',[App\Http\Controllers\Admin\OrderController::class,'invoice'])->name('invoice');
 
-//products
-Route::get('seller/create/products',[App\Http\Controllers\Seller\ProductsController::class,'view'])->name('seller.products');
-Route::get('seller/products/list',[App\Http\Controllers\Seller\ProductsController::class,'index'])->name('seller.products.list');
-Route::post('seller/store/products',[App\Http\Controllers\Seller\ProductsController::class,'store'])->name('seller.products.store');
-Route::get('seller/edit/products/{id}',[App\Http\Controllers\Seller\ProductsController::class,'edit'])->name('seller.products.edit');
-Route::post('seller/update/products/{id}',[App\Http\Controllers\Seller\ProductsCsellerontroller::class,'update'])->name('seller.products.update');
-Route::get('seller/delete/products/{id}',[App\Http\Controllers\Seller\ProductsController::class,'delete'])->name('seller.products.delete');
+    //Invoice pdf
+    Route::get('pdf/{id}','Admin\OrderController@invoicePdf')->name('invoice-pdf');
+
+    //Invoice print
+    Route::get('print/{id}',[App\Http\Controllers\Admin\OrderController::class,'invoicePrint'])->name('invoice-print');
+
+     // Sales Report
+     Route::get('daily/report',[App\Http\Controllers\Admin\OrderController::class,'dailyReport'])->name('daily.report');
+     Route::get('daily/report/details/{id}',[App\Http\Controllers\Admin\OrderController::class,'salesDetails'])->name('admin.sales.details');
+     Route::get('monthly/report',[App\Http\Controllers\Admin\OrderController::class,'monthlyReport'])->name('monthly.report');
+     Route::get('yearly/report',[App\Http\Controllers\Admin\OrderController::class,'yearlyReport'])->name('yearly.report');
+
+//User Management
+
+        // Add new user on admin panel
+        Route::get('admin/create-new-user',[App\Http\Controllers\Admin\UserManageController::class,'addUser'])->name('admin.new.user');
+        Route::post('admin/new-user-store',[App\Http\Controllers\Admin\UserManageController::class,'store'])->name('admin.store.user');
+        Route::get('admin/user-list',[App\Http\Controllers\Admin\UserManageController::class,'userList'])->name('admin.userList');
+        Route::get('admin/edit/user/{id}',[App\Http\Controllers\Admin\UserManageController::class,'editUser'])->name('admin.editUser');
+        Route::put('admin/update/user/{id}',[App\Http\Controllers\Admin\UserManageController::class,'updateUser'])->name('admin.updateUser');
+        Route::get('admin/delete/user/{id}',[App\Http\Controllers\Admin\UserManageController::class,'deleteUser'])->name('admin.deleteUser');
+
+        //customer manage
+        Route::get('admin/customer/list',[App\Http\Controllers\Admin\UserManageController::class,'customerList'])->name('admin.customerList');
+        Route::get('admin/edit/customer/{id}',[App\Http\Controllers\Admin\UserManageController::class,'editCustomer'])->name('admin.editCustomer');
+        Route::put('admin/update/customer/{id}',[App\Http\Controllers\Admin\UserManageController::class,'updateCustomer'])->name('admin.updateCustomer');
+        Route::get('admin/delete/customer/{id}',[App\Http\Controllers\Admin\UserManageController::class,'deleteCustomer'])->name('admin.deleteCustomer');
+        Route::get('send-message/customer/{id}',[App\Http\Controllers\Admin\UserManageController::class,'description'])->name('sendMessage.customer');
+        Route::post( 'customer-send-email',[App\Http\Controllers\Admin\UserManageController::class,'sendEmail'])->name('customer.send.message');
+
+
+    //seller manage
+        Route::get('admin/seller/list',[App\Http\Controllers\Admin\UserManageController::class,'sellerList'])->name('admin.sellerList');
+        Route::get('admin/edit/seller/{id}',[App\Http\Controllers\Admin\UserManageController::class,'editSeller'])->name('admin.editSeller');
+        Route::put('admin/update/seller/{id}',[App\Http\Controllers\Admin\UserManageController::class,'updateSeller'])->name('admin.updateSeller');
+        Route::get('admin/delete/seller/{id}',[App\Http\Controllers\Admin\UserManageController::class,'deleteSeller'])->name('admin.deleteSeller');
+
 
 //front
 Route::get('/',[App\Http\Controllers\Front\HomeController::class, 'index'])->name('front.home');
 Route::get('shop',[App\Http\Controllers\Front\HomeController::class, 'fetch_all_product'])->name('front.shop');
 Route::get('category-product/{id}',[App\Http\Controllers\Front\HomeController::class, 'fetch_category_product'])->name('category.product');
 Route::get('/product/details/{id}/',[App\Http\Controllers\Front\HomeController::class, 'productDetails'])->name('product.details');
+
+//Customer Account information
+Route::middleware('auth')->group(function (){
+    Route::match(['get','post'],'/checkout',[App\Http\Controllers\Front\CheckoutController::class, 'checkout'])->name('checkout');
+    Route::get('customer/edit/{id}',[App\Http\Controllers\Front\DashboardController::class, 'edit'])->name('customer.edit');
+    Route::get('customer/update/{id}',[App\Http\Controllers\Front\DashboardController::class, 'update'])->name('customer.update');
+    Route::get('/orders',[App\Http\Controllers\Front\DashboardController::class, 'orders'])->name('customer.orders');
+    Route::get('/orders/details/{id}',[App\Http\Controllers\Front\DashboardController::class, 'details'])->name('customer.orders.details');
+});
 
 //register
 Route::get('/seller-register',[App\Http\Controllers\Seller\SellerRegisterController::class,'index'])->name('seller_register');
@@ -128,6 +170,13 @@ Route::match(['get','post'], '/cart',[App\Http\Controllers\Front\CartController:
 Route::post( '/cart/delete-products/{id}',[App\Http\Controllers\Front\CartController::class,'delete'])->name('delete.cart.product');
 Route::get( '/update/quantity/increment/{id}/{quantity}',[App\Http\Controllers\Front\CartController::class,'increment'])->name('cart.quantity.increment');
 Route::get( '/update/quantity/decrement/{id}/{quantity}',[App\Http\Controllers\Front\CartController::class,'decrement'])->name('cart.quantity.decrement');
+
+//cart add Product with ajax
+Route::post( '/add-cart-item',[App\Http\Controllers\Front\CartController::class,'ajaxCart'])->name('add-cart-ajax');
+
+
+//cart item count with ajax
+Route::get( 'load-cart-data',[App\Http\Controllers\Front\CartController::class,'cartCount']);
 
 //update cart quantity with ajax
 Route::post( '/update-cart-item-qty-ajax',[App\Http\Controllers\Front\CartController::class,'updateCartQtyAjax']);
@@ -142,3 +191,32 @@ Route::match(['get','post'],'/checkout',[App\Http\Controllers\Front\CheckoutCont
 
 Route::post('/billing-address',[App\Http\Controllers\Front\CheckoutController::class,'store'])->name('billingAddress.store');
 
+//success route
+Route::get('success',[App\Http\Controllers\Front\CheckoutController::class,'success'])->name('success');
+
+
+//Seller
+
+Route::get('seller/dashboard',[App\Http\Controllers\Seller\DashboardController::class,'view'])->name('seller.dashboard');
+
+//products
+Route::get('seller/create/products',[App\Http\Controllers\Seller\ProductsController::class,'view'])->name('seller.products');
+Route::get('seller/products/list',[App\Http\Controllers\Seller\ProductsController::class,'index'])->name('seller.products.list');
+Route::post('seller/store/products',[App\Http\Controllers\Seller\ProductsController::class,'store'])->name('seller.products.store');
+Route::get('seller/edit/products/{id}',[App\Http\Controllers\Seller\ProductsController::class,'edit'])->name('seller.products.edit');
+Route::post('seller/update/products/{id}',[App\Http\Controllers\Seller\ProductsCsellerontroller::class,'update'])->name('seller.products.update');
+Route::get('seller/delete/products/{id}',[App\Http\Controllers\Seller\ProductsController::class,'delete'])->name('seller.products.delete');
+
+//stock Update
+Route::get('stock/product/',[App\Http\Controllers\Seller\ProductsController::class,'productList'])->name('stock.product');
+Route::get('stock/edit/{id}',[App\Http\Controllers\Seller\ProductsController::class,'stockEdit'])->name('stock.edit');
+Route::put('stock/update/{id}',[App\Http\Controllers\Seller\ProductsController::class,'stockUpdate'])->name('stock.update');
+
+//order
+Route::get('vendor/order-list',[App\Http\Controllers\Seller\OrderController::class,'index'])->name('vendor.order.index');
+Route::get('vendor/order/details/{id}',[App\Http\Controllers\Seller\OrderController::class,'show'])->name('vendor.order.show');
+
+// Sales Report
+Route::get('vendor/daily/report',[App\Http\Controllers\Seller\OrderController::class,'dailyReport'])->name('vendor.daily.report');
+Route::get('vendor/monthly/report',[App\Http\Controllers\Seller\OrderController::class,'monthlyReport'])->name('vendor.monthly.report');
+Route::get('vendor/yearly/report',[App\Http\Controllers\Seller\OrderController::class,'yearlyReport'])->name('vendor.yearly.report');

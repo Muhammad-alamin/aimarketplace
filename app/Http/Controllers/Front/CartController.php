@@ -63,8 +63,6 @@ class CartController extends Controller
 
     public function ajaxCart(Request $request )
     {
-        Session::forget('CouponAmount');
-        Session::forget('CouponCode');
         if ($request->ajax()){
             $data = $request->all();
 
@@ -74,7 +72,7 @@ class CartController extends Controller
                 Session::put('session_id',$session_id);
             }
 //            echo "<pre>";print_r($data);die;
-            $countProducts = DB::table('carts')->where(['pro_id'=>$data['product_id'], 'pro_code'=>$data['product_code'], 'pro_price'=>$data['product_price'],
+            $countProducts = DB::table('carts')->where(['pro_id'=>$data['product_id'], 'pro_size'=>$data['size'], 'pro_price'=>$data['product_price'],
                 'session_id'=>$session_id])->count();
 
             $products_quantity = Product::where(['id'=>$data['product_id']])->first();
@@ -83,16 +81,16 @@ class CartController extends Controller
                 return response()->json(['status'=>false,'action'=>'error']);
 //                return redirect()->back()->with('flash_message_error','Product already exists in cart');
             }
-            elseif ($data['product_qty'] > $products_quantity->product_quantity)
+            elseif ($data['product_qty'] > $products_quantity->quantity)
             {
                 return redirect()->back()->with('flash_message_error','stock not available');
             }
             else {
                 DB::table('carts')->insert(['pro_id' => $data['product_id'],
                     'pro_name' => $data['product_name'],
-                    'brand_id' => $data['brand_id'],
+                    'user_id' => $data['user_id'],
                     'category_id' => $data['category_id'],
-                    'pro_code' => $data['product_code'],
+                    'pro_size' => $data['size'],
                     'pro_price' => $data['product_price'],
                     'pro_quantity' => $data['product_qty'],
                     'session_id' => $session_id]);

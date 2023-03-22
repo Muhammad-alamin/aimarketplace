@@ -19,9 +19,14 @@
                     <a href="#" class="topbar-one__search search-popup__toggler"><i class="egypt-icon-search"></i>
                         <!-- /.egypt-icon-search --></a>
                 </li>
-                <li>
-                    @if (Route::has('login') && Auth::check())
-                    <a href="{{ route('login') }}" class="thm-btn topbar-one__btn">{{ substr(Auth::user()->name, 0,  6) }}</a><!-- /.thm-btn -->
+                <li>@if (Route::has('login') && Auth::check())
+                    @if(auth()->user()->role == 'admin')
+                    <a href="{{ route('admin.dashboard') }}" class="thm-btn topbar-one__btn">{{ substr(Auth::user()->name, 0,  6) }}</a><!-- /.thm-btn -->
+                    @elseif (auth()->user()->role == 'seller')
+                    <a href="{{ route('seller.dashboard') }}" class="thm-btn topbar-one__btn">{{ substr(Auth::user()->name, 0,  6) }}</a><!-- /.thm-btn -->
+                    @elseif (auth()->user()->role == 'customer')
+                    <a href="{{ route('customer.edit', encrypt(auth()->user()->id)) }}" class="thm-btn topbar-one__btn">{{ substr(Auth::user()->name, 0,  6) }}</a><!-- /.thm-btn -->
+                    @endif
                     @else
                     <a href="{{ route('login') }}" class="thm-btn topbar-one__btn">Sign in</a><!-- /.thm-btn -->
                     @endif
@@ -77,7 +82,7 @@
             </div><!-- /.navbar-collapse -->
             <div class="right-side-box">
                 <a href="{{ route('cart') }}" class="site-header__cart"><i class="egypt-icon-supermarket"></i>
-                    <!-- /.egypt-icon-supermarket --> <span class="count">3</span><!-- /.count --></a>
+                    <!-- /.egypt-icon-supermarket --> <span class="count cart-count">0</span><!-- /.count --></a>
                 <!-- /.site-header__cart -->
                 <a href="#" class="site-header__sidemenu-nav side-menu__toggler">
                     <span class="site-header__sidemenu-nav-line"></span><!-- /.site-header__sidemenu-nav-line -->

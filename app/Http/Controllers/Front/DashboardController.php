@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
-use App\Model\Order;
-use App\User;
+use App\Models\Order;
+use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use PhpParser\Node\Stmt\Else_;
 
 class DashboardController extends Controller
@@ -32,13 +33,13 @@ class DashboardController extends Controller
 
        $data['orders'] = Order::with('order_details')->where('user_id',$user_id)->get();
 
-       return view('front.customerInformation.orders',$data);
+       return view('front.customerInformation.index',$data);
    }
 
    public function details($id){
-       $order_id = Crypt::decryptString($id);
+       $order_id = Crypt::decrypt($id);
 
-       $data ['order'] = Order::with('order_details', 'billingAdd','shippingAdd')->find($order_id);
+       $data ['order'] = Order::with('order_details')->find($order_id);
        $data['orders'] = Order::where('id',$order_id)->first();
 //       $data['order'] = DB::table('orders')
 //           ->join('order_details','orders.id', 'order_details.order_id')
@@ -64,8 +65,9 @@ class DashboardController extends Controller
    }
 
    public function edit($id){
-       $user_id = Crypt::decryptString($id);
+       $user_id = Crypt::decrypt($id);
        $data ['users'] = User::find($user_id);
+       $data['orders'] = Order::with('order_details')->where('user_id',$user_id)->get();
        return view('front.customerInformation.editAddress',$data);
    }
 
@@ -76,22 +78,27 @@ class DashboardController extends Controller
        }
        else
        {
-           $user_id = Crypt::decryptString($id);
+        $decrypt_id = decrypt($id);
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required|unique:users,phone,'.$decrypt_id,
+            'email' => 'required|unique:users,email,'.$decrypt_id,
 
-           $cusAdd = User::find($user_id);
+        ]);
 
-           $cusAdd->name = $request->name;
-           $cusAdd->email = $request->email;
-           $cusAdd->mobile = $request->mobile;
-           $cusAdd->country = $request->country;
-           $cusAdd->address = $request->address;
-           $cusAdd->city = $request->city;
-           $cusAdd->state = $request->state;
-           $cusAdd->zip = $request->zip;
-           $cusAdd->status = 'Active';
-           $cusAdd->save();
+        $user = User::findOrFail($decrypt_id);
 
-           return redirect()->route('customer.address');
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->location = $request->location;
+        if ($request->has('password') && $request->password != null ){
+
+            $user->password = Hash::make($request->password);
+        }
+        $user->save();
+        session()->flash('success', 'User Updated Successfully');
+        return redirect()->back();
        }
 
 

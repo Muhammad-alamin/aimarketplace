@@ -26,7 +26,7 @@ class CustomRegisterController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->country = $request->country;
-        $user->role = $request->role;
+        $user->role = 'customer';
         $user->password = Hash::make($request->password);
         $user->save();
         return redirect()->route('login');

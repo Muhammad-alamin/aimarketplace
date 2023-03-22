@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Admin\Category;
 use App\Models\Admin\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class ProductsController extends Controller
@@ -110,5 +111,41 @@ class ProductsController extends Controller
         Product::destroy($d_id);
         session()->flash('success', 'Product deleted Successfully');
         return redirect()->route('seller.products.list');
+    }
+
+    public function productList(){
+        $data ['products'] = DB::table('products')
+            ->join('categories','products.product_category_id', 'categories.id')
+            ->join('users','products.user_id', 'users.id')
+            ->select('categories.category_title','users.name','products.*')
+            ->orderBy('products.id','DESC')
+            ->get();
+        return view('seller.stock.product',$data);
+    }
+
+    public function stockEdit($id){
+        $product_id = Crypt::decryptString($id);
+        $data['product']= Product::find($product_id);
+        return view('seller.stock.edit',$data);
+    }
+
+    public function stockUpdate(Request $request, $id){
+        if (auth()->user()->demo_id == 1) {
+            session()->flash('error', 'Demo account are not change anything! thanks');
+            return redirect()->route('stock.product');
+        }
+        else
+        {
+            $request->validate([
+                'product_quantity' => 'required',
+            ]);
+            $product_id = Crypt::decryptString($id);
+            $product = Product::find($product_id);
+
+            $product->quantity = $request->product_quantity;
+            $product->save();
+            session()->flash('success', 'Stock Updated Successfully');
+            return redirect()->route('stock.product');
+        }
     }
 }

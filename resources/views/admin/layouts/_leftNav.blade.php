@@ -79,24 +79,18 @@
                             </a>
                             <ul class="nav nav-children">
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.professional') }}">
-                                        Add user
-                                    </a>
+                                    <a href="{{route('admin.new.user')}}" class="nk-menu-link "><span class="nk-menu-text">Add user</span></a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.professional.list') }}">
-                                        user list
-                                    </a>
+                                    <a href="{{route('admin.userList')}}" class="nk-menu-link "><span class="nk-menu-text">User list</span></a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.professional.list') }}">
-                                        Manage customer
-                                    </a>
+                                    <a href="{{route('admin.customerList')}}" class="nk-menu-link "><span class="nk-menu-text">Manage Customer</span></a>
+
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.professional.list') }}">
-                                        Manage seller
-                                    </a>
+                                    <a href="{{route('admin.sellerList')}}" class="nk-menu-link"><span class="nk-menu-text ">Manage Seller</span></a>
+
                                 </li>
                             </ul>
                         </li>
@@ -106,13 +100,8 @@
                             </a>
                             <ul class="nav nav-children">
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
+                                    <a class="nav-link" href="{{ route('admin.product.approval') }}">
                                         Product - Approval
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
-                                        Seller - Approval
                                     </a>
                                 </li>
                                 <li>
@@ -123,7 +112,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link" href="{{ route('order.index') }}">
                                 <span>Orders</span>
                             </a>
                         </li>
@@ -133,19 +122,15 @@
                             </a>
                             <ul class="nav nav-children">
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
-                                        Daily - Report
-                                    </a>
+                                    <a href="{{route('daily.report')}}" class="nk-menu-link @if(request()->routeIs('daily.report'))  active @endif"><span class="nk-menu-text">Daily Report</span></a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
-                                        Monthly - Report
-                                    </a>
+                                    <a href="{{route('monthly.report')}}" class="nk-menu-link @if(request()->routeIs('monthly.report'))  active @endif"><span class="nk-menu-text">Monthly Report</span></a>
+
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
-                                        Yearly - Report
-                                    </a>
+                                    <a href="{{route('yearly.report')}}" class="nk-menu-link @if(request()->routeIs('yearly.report'))  active @endif"><span class="nk-menu-text">Yearly Report</span></a>
+
                                 </li>
                             </ul>
                         </li>

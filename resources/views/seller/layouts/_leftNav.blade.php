@@ -39,7 +39,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link" href="{{ route('vendor.order.index') }}">
                                 <span>Orders</span>
                             </a>
                         </li>
@@ -49,24 +49,24 @@
                             </a>
                             <ul class="nav nav-children">
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
+                                    <a class="nav-link" href="{{ route('vendor.daily.report') }}">
                                         Daily - Report
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
+                                    <a class="nav-link" href="{{ route('vendor.monthly.report') }}">
                                         Monthly - Report
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="nav-link" href="{{ route('admin.projects') }}">
+                                    <a class="nav-link" href="{{ route('vendor.yearly.report') }}">
                                         Yearly - Report
                                     </a>
                                 </li>
                             </ul>
                         </li>
                         <li>
-                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                            <a class="nav-link" href="{{ route('stock.product') }}">
                                 <span>Stock Management</span>
                             </a>
                         </li>
